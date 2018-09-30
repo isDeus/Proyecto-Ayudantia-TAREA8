@@ -27,6 +27,9 @@ public class Jugador {
         while(this.health>15){
             this.health = 15;
         }
+        while(this.health<0){
+            this.health = 0;
+        }
     }
     
     public void cambiarPosicion(int posicion){
@@ -54,3 +57,4 @@ public class Jugador {
         return this.health;
     }
 }
+    

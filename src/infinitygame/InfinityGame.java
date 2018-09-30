@@ -41,7 +41,7 @@ public class InfinityGame {
        }
      }
     
-    private static int cantidadJugadores(){
+    public static int cantidadJugadores(){
         int numjug;
         Scanner sc = new Scanner(System.in);
         System.out.println("Cuantos jugadores van a jugar? ");
@@ -53,7 +53,7 @@ public class InfinityGame {
         return numjug;
     }
     
-    private static String nombreJugador(){
+    public static String nombreJugador(){
         String nombre;
         Scanner sc = new Scanner(System.in);
         System.out.println("Ingrese el nombre del jugador :");
@@ -61,7 +61,7 @@ public class InfinityGame {
         return nombre;
     }
     
-    private static int numeroCasilla(){
+    public static int numeroCasilla(){
         Scanner sc = new Scanner(System.in);
         int casilla;
         System.out.println("Ingrese el número de casillas que desea ocupar, no debe ser menor que 20");
@@ -74,7 +74,7 @@ public class InfinityGame {
         return(casilla);
     }
     
-    private static char[] creacionTablero(int numerocasilla){
+    public static char[] creacionTablero(int numerocasilla){
         char tablero[] = new char[numerocasilla];
         //Array de char que contiene cada casilla especial: B=Blanco, P=Portal, S=Salud, D=Desafio
         char casilla[] = {'B','P','S','D'};
@@ -89,7 +89,7 @@ public class InfinityGame {
         return tablero;
     }
     
-    private static int lanzarDados(){
+    public static int lanzarDados(){
         int dado[] = {1,2,3,4,5,6};
         int idx = new Random().nextInt(dado.length);
         int dado1 = dado[idx];
@@ -99,7 +99,7 @@ public class InfinityGame {
         return sumaDado;
     }
     
-    private static void casillaDesafio(Jugador[] players,int indice){
+    public static void casillaDesafio(Jugador[] players,int indice){
         //Dos tipos de desafios, 0 es avanzar retroceder y 1 es agregar o quitar vida
         //el indice es donde esta el jugador que cae en esa casilla
         int desafio = (int)(Math.random()*2);
@@ -139,7 +139,7 @@ public class InfinityGame {
         }
     }
     
-    private static void casillaPortal(Jugador[] players, int indice, char tablero[]){
+    public static void casillaPortal(Jugador[] players, int indice, char tablero[]){
         for(int i=0;i<tablero.length;i++){
             if(tablero[i]=='P'){
                 if(i>players[indice].getPosicion()){
@@ -149,7 +149,7 @@ public class InfinityGame {
         }
     }
     
-    private static void casillaSalud(Jugador[] players,int indice){
+    public static void casillaSalud(Jugador[] players,int indice){
         int vida = (int)((Math.random()*4)+1);
         int signo = (int)(Math.random()*2); 
         if(signo==0){
@@ -159,7 +159,7 @@ public class InfinityGame {
         }
     }
     
-    private static void mostrarTabla(Jugador[] players){
+    public static void mostrarTabla(Jugador[] players){
         System.out.println("NickName "+"\t"+"Puntos de salud "+"\t"+"Posición actual");
         for(int i=0;i<players.length;i++){
             System.out.println(players[i].getName()+"\t"+players[i].getSalud()+"\t"+players[i].getPosicion());
