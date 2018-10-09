@@ -57,7 +57,7 @@ public class InfinityGameTest {
         Jugador[] players = new Jugador[1];
         players[0] = new Jugador("test",100);
         //La vida del juegador debe ser menor que 15 y no negativa
-        InfinityGame.casillaSalud(players, 0);
+        InfinityGame.casillaSalud(players[0]);
         boolean esperado = false;
         if(players[0].getSalud()>=0 && players[0].getSalud()<=15){
             esperado = true;
@@ -78,13 +78,18 @@ public class InfinityGameTest {
          if(testTablero[i]=='P'){
              int nuevaPosicion = i;
              players[0].setPosicion(i);
-             InfinityGame.casillaPortal(players, 0, testTablero);
+             InfinityGame.casillaPortal(players[0], 0, testTablero);
              if(testTablero[nuevaPosicion] == 'P'){
                  esperado = true;
              }
              assertTrue(esperado);
          }
      }
+    }
+    
+    @Test
+    public void testNumeroCasilla(){
+        
     }
     
 }

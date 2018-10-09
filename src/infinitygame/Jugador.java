@@ -14,12 +14,14 @@ public class Jugador {
     private int health;
     private int position;
     private int numcasillas;
+    private int meditar;
     
     public Jugador(String nombre, int numcasillas){
         this.name = nombre;
         this.health = 15;
         this.position = 0;
         this.numcasillas = numcasillas;
+        this.meditar = 5;
     }
     
     public void cambiarVida(int vida){
@@ -35,10 +37,11 @@ public class Jugador {
     public void cambiarPosicion(int posicion){
         this.position = (this.position+posicion);
         if(this.position>this.numcasillas){
-            this.position = (this.position-this.numcasillas);
+            this.position = this.numcasillas;
         }
         if(this.position<0){
-            this.position = (this.numcasillas+this.position);
+            this.position = 0;
+            //this.position = (this.numcasillas+this.position);
         }
     }
     
@@ -55,6 +58,17 @@ public class Jugador {
     }
     public int getSalud(){
         return this.health;
+    }
+    public int restarMeditar(){
+        this.meditar = (this.meditar - 1);
+        if(this.meditar<0){
+            this.meditar=0;
+        }
+        return this.meditar;
+    }
+    
+    public int getMeditar(){
+        return this.meditar;
     }
 }
     

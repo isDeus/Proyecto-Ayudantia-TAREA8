@@ -20,6 +20,7 @@ public class InfinityGame {
        int casilla = numeroCasilla();
        char tablero[] = creacionTablero(casilla);
        int numjug = cantidadJugadores();
+       Scanner sc = new Scanner(System.in);
        
        String jugadores[] = new String[numjug];
        for(int i=0;i<jugadores.length;i++){
@@ -30,26 +31,78 @@ public class InfinityGame {
        Jugador[] players = new Jugador[numjug];
        for(int i=0;i<jugadores.length;i++){
            String nombre = jugadores[i];
-           players[i] = new Jugador(nombre,casilla);
+           players[i] = new Jugador(nombre,casilla-1);
        }
-       //Turno segun la cantidad de personas
-       for(int i=0;i<players.length;i++){
-           int cantidadDado = lanzarDados();
-           players[i].cambiarPosicion(cantidadDado);
-           //if(players[i].getPosicion()==)
-           mostrarTabla(players);
-       }
+       boolean estado = false;
+       do{
+           for(int i=0;i<players.length;i++){
+               mostrarTabla(players);
+               System.out.println("Que acción desea realizar? 1)Lanzar Dados 2)Meditar");
+               int eleccion = sc.nextInt();
+               switch(eleccion){
+                   case 1:
+                       System.out.println("Presione cualquier tecla para lanzar tus dados");
+                       sc.next();
+                       int dado = lanzarDados();
+                       players[i].cambiarPosicion(dado);
+                       if(players[i].getPosicion()==(casilla-1)){
+                           System.out.println("El jugador "+players[i].getName()+" es el ganador!!!!");
+                           estado = true;
+                       }
+                       else{
+                           int position = players[i].getPosicion();
+                           char letra = tablero[position];
+                           System.out.println(letra);
+                           switch(letra){
+                               case 'B':
+                                   break;
+                               case 'P':
+                                   casillaPortal(players[i],i,tablero);
+                                   break;
+                               case 'S':
+                                   casillaSalud(players[i]);
+                                   break;
+                                case 'D':
+                                   casillaDesafio(players,i);
+                                   break;
+                                default:
+                                   System.out.println("Hola programa culiao");
+                                   break;
+                           }
+                           }
+                       break;
+                   case 2:
+                       meditar(players[i], tablero);
+                       break;
+                   default:
+                       System.out.println("Has perdido tu turno por baka");
+                       break;
+               }    
+     }
+               
+               
+           
+       
+       }while(!estado);
      }
     
     public static int cantidadJugadores(){
-        int numjug;
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Cuantos jugadores van a jugar? ");
-        numjug = sc.nextInt();
-        while(numjug<1){
-            System.out.println("El número mínimo de jugadores es 1, intente denuevo");
+        int numjug = 0;
+        while(true){
+            try{
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Cuantos jugadores van a jugar? ");
             numjug = sc.nextInt();
-        }
+            while(numjug<1){
+                System.out.println("El número mínimo de jugadores es 1, intente denuevo");
+                numjug = sc.nextInt();
+            }
+            System.out.println("El numero de jugadores es de : "+numjug);
+            break;
+        } catch (InputMismatchException e){
+            System.out.println("El valor ingresado no es un número");
+        }        
+        }       
         return numjug;
     }
     
@@ -62,16 +115,28 @@ public class InfinityGame {
     }
     
     public static int numeroCasilla(){
-        Scanner sc = new Scanner(System.in);
-        int casilla;
-        System.out.println("Ingrese el número de casillas que desea ocupar, no debe ser menor que 20");
-        casilla = sc.nextInt();
-        while(casilla<20){
-        System.out.println("El número que has ingresado es menor que 20, intenta denuevo");
-        casilla = sc.nextInt();
+        int casilla = 0;
+        while (true){
+            try{
+                Scanner sc = new Scanner(System.in);
+                System.out.println("Ingrese el número de casillas que desea ocupar, no debe ser menor que 20");
+                casilla = sc.nextInt();
+                while(casilla<20){
+                    System.out.println("El número que has ingresado es menor que 20, intenta denuevo");
+                    casilla = sc.nextInt();
+                }
+                System.out.println("El número de casillas selecionadas es de: "+casilla);
+                break;
+                
+            } catch (InputMismatchException e){
+                System.out.println("El valor ingresado no es un número");
+            }
         }
-        System.out.println("El número de casillas selecionadas es de: "+casilla);
-        return(casilla);
+        return casilla;
+    }
+    
+    public void enCasoError(){
+        
     }
     
     public static char[] creacionTablero(int numerocasilla){
@@ -100,6 +165,7 @@ public class InfinityGame {
     }
     
     public static void casillaDesafio(Jugador[] players,int indice){
+        System.out.println("Has caido en la casilla desafio!");
         //Dos tipos de desafios, 0 es avanzar retroceder y 1 es agregar o quitar vida
         //el indice es donde esta el jugador que cae en esa casilla
         int desafio = (int)(Math.random()*2);
@@ -110,9 +176,11 @@ public class InfinityGame {
                switch(direccion){
                    case 0:
                        players[indice].cambiarPosicion(-cantidad);
+                       System.out.println("Has retrocedido "+cantidad+" de casillas");
                        break;
                    case 1:
                        players[indice].cambiarPosicion(cantidad);
+                       System.out.println("Has avanzado "+cantidad+" de casillas");
                        break;
                }
                 break;
@@ -125,37 +193,43 @@ public class InfinityGame {
                         players[i].cambiarVida(-cantidadVida);
                     }
                     players[indice].cambiarVida(+cantidadVida);
-                    
+                        System.out.println("Se ha restado la vida de todos en "+cantidadVida);
                         break;
                     case 1:
                         for(int i=0;i<players.length;i++){
                         players[i].cambiarVida(cantidadVida);
                     }
                     players[indice].cambiarVida(-cantidadVida);
-                        
+                        System.out.println("Se ha aumentado la vida de todos en "+cantidadVida);
                         break;
                 }
                 break;
         }
     }
     
-    public static void casillaPortal(Jugador[] players, int indice, char tablero[]){
+    public static void casillaPortal(Jugador players, int indice, char tablero[]){
+        System.out.println("Has caido en una casilla de portal!");
         for(int i=0;i<tablero.length;i++){
             if(tablero[i]=='P'){
-                if(i>players[indice].getPosicion()){
-                    players[indice].setPosicion(i);
+                if(i>players.getPosicion()){
+                    players.setPosicion(i);
+                    System.out.println("Has sido transportado a la casilla "+i);
+                    break;
                 }
             }
         }
     }
     
-    public static void casillaSalud(Jugador[] players,int indice){
+    public static void casillaSalud(Jugador players){
+        System.out.println("Has caido en una casilla de salud!");
         int vida = (int)((Math.random()*4)+1);
         int signo = (int)(Math.random()*2); 
         if(signo==0){
-            players[indice].cambiarVida(-vida);
+            players.cambiarVida(-vida);
+            System.out.println("Se te ha restado "+vida+" vida");
         } else if (signo==1){
-            players[indice].cambiarVida(vida);
+            players.cambiarVida(vida);
+            System.out.println("Se te ha sumado "+vida+" vida");
         }
     }
     
@@ -166,4 +240,48 @@ public class InfinityGame {
         }
     }
     
-}
+    public static void meditar(Jugador players, char tablero[]){
+        System.out.println("Has elegido meditar");
+        int oportunidades = players.getMeditar();
+        if(oportunidades == 0){
+            System.out.println("Tus oportunidades se han acabado, se ha restado 1 punto de salud por tu insolencia");
+            players.cambiarVida(-1);
+        } else {
+            while(true){
+                try{
+                    players.restarMeditar();
+                    int position = players.getPosicion();
+                    char letra = tablero[position];
+                    System.out.println("Tu posición actual es : " +position+letra);
+                    System.out.println("Puedes elegir una nueva posicion 3 casillas a la redonda");
+                    System.out.println("Que casilla eligiras?");
+                    Scanner sc = new Scanner(System.in);
+                    int eleccion = sc.nextInt();
+                    while(eleccion>(position+3)||eleccion<(position-3)){
+                        System.out.println("No puedes elegir un valor afuera de las 3 casillas a la redonda, intenta denuevo");
+                        eleccion = sc.nextInt();
+                    }
+                    players.setPosicion(eleccion);
+                    break;
+                } catch(ArrayIndexOutOfBoundsException e){
+                    System.out.println("Te has ido fuera del tablero, intenta denuevo");
+                }
+            }
+            
+            
+            
+            
+            
+            
+            
+                
+            
+                
+            }
+            //El erro mas comun que va a ocurrir es un out of bounds, eso significa 
+            // hacer lo mismo que en los metodos que arregue de tablero y pedir jugadores
+        }
+    }
+    
+
+
