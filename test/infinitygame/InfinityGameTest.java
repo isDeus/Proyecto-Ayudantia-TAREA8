@@ -31,6 +31,7 @@ public class InfinityGameTest {
     
     @Before
     public void setUp() {
+        Dado dado = new Dado();
     }
     
     @After
@@ -43,7 +44,7 @@ public class InfinityGameTest {
 
     @Test
     public void testLanzarDado(){
-        int resultado = InfinityGame.lanzarDados();
+        int resultado = dado.lanzarDado();
         boolean esperado = false;
         if(resultado>1&&resultado<13){
             esperado = true;
