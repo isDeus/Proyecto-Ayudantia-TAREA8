@@ -26,24 +26,24 @@ public class Dado {
         return caraResultante;
     }
 
-    public int reliquia(int suerte) {
-        Random r = new Random();
-        if (suerte == 1) {
-            float probabilidadLucky = r.nextFloat();
-            if (probabilidadLucky <= 0.50f) {
-                return 1;
- 
-            } else {
-                return 2;
-            }
-        } else {
-            float probabilidad = r.nextFloat();
-            if (probabilidad <= 0.01f) {
-                return 1;
-            } else {
-                return 2;
-            }
-        }
-    }
+//    public int reliquia(int suerte) {
+//        Random r = new Random();
+//        if (suerte == 1) {
+//            float probabilidadLucky = r.nextFloat();
+//            if (probabilidadLucky <= 0.50f) {
+//                return 1;
+// 
+//            } else {
+//                return 0;
+//            }
+//        } else {
+//            float probabilidad = r.nextFloat();
+//            if (probabilidad <= 0.01f) {
+//                return 1;
+//            } else {
+//                return 0;
+//            }
+//        }
+//    }
 
 }
