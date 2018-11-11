@@ -11,25 +11,15 @@ package infinitygame;
  */
 public class Casilla {
 
-    private int valor;
+    private char casilla;
+    private char tipo;
 
-    public Casilla(int valor) {
-        this.valor = valor;
+    public Casilla(String Tipo) {
+        TipoCasilla elTipo = Enum.valueOf(TipoCasilla.class, Tipo);
+        this.tipo = elTipo.getTipo();
     }
-
-    public char devolverCasilla() {
-        char casilla[] = {'B', 'P', 'S', 'D'};
-        switch (this.valor) {
-            case 1:
-                return casilla[0];
-            case 2:
-                return casilla[1];
-            case 3:
-                return casilla[2];
-            case 4:
-                return casilla[3];
-            default:
-                return casilla[0];
-        }
+    
+    public char devolverTipoCasilla(){
+        return this.tipo;
     }
 }

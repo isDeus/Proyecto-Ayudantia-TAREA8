@@ -23,9 +23,12 @@ public class Tablero {
 
     public void llenadoTablero() {
         for (int i = 1; i < (this.tablero.length - 2); i++) {
-            int valor = new Random().nextInt(4) + 1;
-            Casilla casilla = new Casilla(valor);
-            this.tablero[i] = casilla.devolverCasilla();
+            String[] valores = new String[]{"BLANCO","PORTAL", "SALUD", "DESAFIO"};
+            int rnd = new Random().nextInt(valores.length);
+            String tipo = valores[rnd];
+            Casilla casilla = new Casilla(tipo);
+            char tipoCasilla = casilla.devolverTipoCasilla();
+            this.tablero[i] = tipoCasilla;
         }
     }
 
