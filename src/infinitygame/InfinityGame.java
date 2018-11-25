@@ -13,111 +13,41 @@ import java.util.*;
  */
 public class InfinityGame {
 
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String[] args) {
-//        System.out.println("Bienvenido a InfinityGame");
-//        int casilla = numeroCasilla();
-//        char tablero[] = creacionTablero(casilla);
-//        int numjug = cantidadJugadores();
-//        Scanner sc = new Scanner(System.in);
-//
-//        String jugadores[] = new String[numjug];
-//        for (int i = 0; i < jugadores.length; i++) {
-//            jugadores[i] = nombreJugador();
-//        }
-//
-//        //creacion array de objectos de la clase jugador
-//        Jugador[] players = new Jugador[numjug];
-//        for (int i = 0; i < jugadores.length; i++) {
-//            String nombre = jugadores[i];
-//            players[i] = new Jugador(nombre, casilla - 1);
-//        }
-//        boolean estado = false;
-//        do {
-//            for (int i = 0; i < players.length; i++) {
-//                mostrarTabla(players);
-//                System.out.println("Que acción desea realizar? 1)Lanzar Dados 2)Meditar");
-//                int eleccion = sc.nextInt();
-//                switch (eleccion) {
-//                    case 1:
-//                        System.out.println("Presione cualquier tecla para lanzar tus dados");
-//                        sc.next();
-//                        int dado = lanzarDados();
-//                        players[i].cambiarPosicion(dado);
-//                        if (players[i].getPosicion() == (casilla - 1)) {
-//                            System.out.println("El jugador " + players[i].getName() + " es el ganador!!!!");
-//                            estado = true;
-//                        } else {
-//                            int position = players[i].getPosicion();
-//                            char letra = tablero[position];
-//                            System.out.println(letra);
-//                            switch (letra) {
-//                                case 'B':
-//                                    break;
-//                                case 'P':
-//                                    casillaPortal(players[i], i, tablero);
-//                                    break;
-//                                case 'S':
-//                                    casillaSalud(players[i]);
-//                                    break;
-//                                case 'D':
-//                                    casillaDesafio(players, i);
-//                                    break;
-//                                default:
-//                                    System.out.println("Hola programa culiao");
-//                                    break;
-//                            }
-//                        }
-//                        break;
-//                    case 2:
-//                        meditar(players[i], tablero);
-//                        break;
-//                    default:
-//                        System.out.println("Has perdido tu turno por baka");
-//                        break;
-//                }
-//            }
-//
-//        } while (!estado);
-//    }
-    public static void ejecutarGame() {
+    private ArrayList<Jugador> players;
+
+    public InfinityGame() {
+        this.players = new ArrayList<>();
+    }
+
+    public void ejecutarGame() {
         System.out.println("Bienvenido a InfinityGame");
         //Creacion casilla
         int casilla = numeroCasilla();
         Tablero tablerito = new Tablero(casilla);
         tablerito.llenadoTablero();
         char tablero[] = tablerito.getTablero();
-        //Creacion array de jugadores
         int numjug = cantidadJugadores();
-        String jugadores[] = new String[numjug];
-        for (int i = 0; i < jugadores.length; i++) {
-            jugadores[i] = nombreJugador();
-        }
-        Jugador[] players = new Jugador[numjug];
-        for (int i = 0; i < jugadores.length; i++) {
-            String nombre = jugadores[i];
-            players[i] = new Jugador(nombre, casilla - 1);
-        }
+
+        agregarJugadores(numjug, casilla);
+
         //Creacion Guardian
         Guardian guardian = new Guardian(numjug);
         boolean estado = false;
         Scanner sc = new Scanner(System.in);
         do {
-            for (int i = 0; i < players.length; i++) {
-                mostrarTabla(players);
+            for (int i = 0; i < this.players.size(); i++) {
+                mostrarTabla();
                 //Hablidad de furia del guardian
                 int habilidad = guardian.habilidadFuria();
                 if (habilidad == 1) {
-                    for (int recorrido = 0; recorrido < players.length; recorrido++) {
-                        players[recorrido].cambiarVida(-1);
+                    for (int recorrido = 0; recorrido < this.players.size(); recorrido++) {
+                        this.players.get(i).cambiarVida(-1);
                     }
                     System.out.println("El guardian ha activado su habilidad furia!");
                     System.out.println("Se ha restado 1 de vida a todos los jugadores");
                 }
                 //Turno normal del jugador
-                System.out.println("Que acción desea realizar? 1)Lanzar Dados 2)Meditar");
+                System.out.println("Que acción desea realizar? 1)Lanzar Dados 2)Meditar 3)Usar Habiliad especial");
                 int eleccion = sc.nextInt();
                 switch (eleccion) {
                     case 1:
@@ -135,32 +65,32 @@ public class InfinityGame {
                             suerte = reliquia.activarReliquia(2);
                         }
                         if (suerte == 1) {
-                            players[i].cambiarVida(15);
+                            this.players.get(i).cambiarVida(15);
                         }
                         //Comprobacion de vida del guardian
                         if (guardian.getVida() == 0) {
                             System.out.println("\"El jugador \" + players[i].getName() + \" es el ganador!!!!\"");
                             estado = true;
                         }
-                        players[i].cambiarPosicion(dado);
-                        if (players[i].getPosicion() == (casilla - 1)) {
-                            System.out.println("El jugador " + players[i].getName() + " es el ganador!!!!");
+                        this.players.get(i).cambiarPosicion(dado);
+                        if (this.players.get(i).getPosicion() == (casilla - 1)) {
+                            System.out.println("El jugador " + this.players.get(i).getName() + " es el ganador!!!!");
                             estado = true;
                         } else {
-                            int position = players[i].getPosicion();
+                            int position = this.players.get(i).getPosicion();
                             char letra = tablero[position];
                             System.out.println(letra);
                             switch (letra) {
                                 case 'B':
                                     break;
                                 case 'P':
-                                    casillaPortal(players[i], i, tablero);
+                                    casillaPortal(this.players.get(i), i, tablero);
                                     break;
                                 case 'S':
-                                    casillaSalud(players[i]);
+                                    casillaSalud(this.players.get(i));
                                     break;
                                 case 'D':
-                                    casillaDesafio(players, i);
+                                    casillaDesafio(i);
                                     break;
                                 default:
                                     System.out.println("Hola");
@@ -169,7 +99,17 @@ public class InfinityGame {
                         }
                         break;
                     case 2:
-                        meditar(players[i], tablero);
+                        meditar(this.players.get(i), tablero);
+                        break;
+                    case 3:
+                        String clase = this.players.get(i).getClase();
+                        if (clase.equals("guerrero")) {
+                            Guerrero guerrero = (Guerrero) this.players.get(i);
+                            guerrero.enfurecerse(this.players);
+                        } else {
+                            Mago mago = (Mago) this.players.get(i);
+                            mago.concentracion(guardian);
+                        }
                         break;
                     default:
                         System.out.println("Has perdido tu turno por baka");
@@ -180,7 +120,7 @@ public class InfinityGame {
         } while (!estado);
     }
 
-    public static int cantidadJugadores() {
+    private static int cantidadJugadores() {
         int numjug = 0;
         while (true) {
             try {
@@ -200,7 +140,28 @@ public class InfinityGame {
         return numjug;
     }
 
-    public static String nombreJugador() {
+    private void agregarJugadores(int cantidadJugadores, int numCasillas) {
+        Scanner sc = new Scanner(System.in);
+        for (int i = 1; i <= cantidadJugadores; i++) {
+            String nombre = nombreJugador();
+            System.out.println("Eliga la clase del jugador :");
+            System.out.println("1) Guerrero");
+            System.out.println("2) Mago");
+            int eleccion = sc.nextInt();
+            switch (eleccion) {
+                case 1:
+                    this.players.add(new Guerrero(nombre, numCasillas));
+                    break;
+                case 2:
+                    this.players.add(new Mago(nombre, numCasillas));
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private static String nombreJugador() {
         String nombre;
         Scanner sc = new Scanner(System.in);
         System.out.println("Ingrese el nombre del jugador :");
@@ -208,7 +169,7 @@ public class InfinityGame {
         return nombre;
     }
 
-    public static int numeroCasilla() {
+    private static int numeroCasilla() {
         int casilla = 0;
         while (true) {
             try {
@@ -229,30 +190,7 @@ public class InfinityGame {
         return casilla;
     }
 
-//    public static char[] creacionTablero(int numerocasilla) {
-//        char tablero[] = new char[numerocasilla];
-//        //Array de char que contiene cada casilla especial: B=Blanco, P=Portal, S=Salud, D=Desafio
-//        char casilla[] = {'B', 'P', 'S', 'D'};
-//        //Designar el inicio y el final del tablero con la A y la Z
-//        tablero[0] = 'A';
-//        tablero[numerocasilla - 1] = 'Z';
-//        //LLenado de casillas 
-//        for (int i = 1; i < (tablero.length - 2); i++) {
-//            int idx = new Random().nextInt(casilla.length);
-//            tablero[i] = casilla[idx];
-//        }
-//        return tablero;
-//    }
-//    public static int lanzarDados() {
-//        int dado[] = {1, 2, 3, 4, 5, 6};
-//        int idx = new Random().nextInt(dado.length);
-//        int dado1 = dado[idx];
-//        int dado2 = dado[idx];
-//        int sumaDado = (dado1 + dado2);
-//        System.out.println("La suma de tus dados es " + sumaDado);
-//        return sumaDado;
-//    }
-    public static void casillaDesafio(Jugador[] players, int indice) {
+    private void casillaDesafio(int indice) {
         System.out.println("Has caido en la casilla desafio!");
         //Dos tipos de desafios, 0 es avanzar retroceder y 1 es agregar o quitar vida
         //el indice es donde esta el jugador que cae en esa casilla
@@ -263,11 +201,11 @@ public class InfinityGame {
                 int cantidad = (int) ((Math.random() * 6) + 1);//cantidad de posiciones
                 switch (direccion) {
                     case 0:
-                        players[indice].cambiarPosicion(-cantidad);
+                        this.players.get(indice).cambiarPosicion(-cantidad);
                         System.out.println("Has retrocedido " + cantidad + " de casillas");
                         break;
                     case 1:
-                        players[indice].cambiarPosicion(cantidad);
+                        this.players.get(indice).cambiarPosicion(cantidad);
                         System.out.println("Has avanzado " + cantidad + " de casillas");
                         break;
                 }
@@ -277,17 +215,17 @@ public class InfinityGame {
                 int signo = (int) (Math.random() * 2);
                 switch (signo) {
                     case 0:
-                        for (int i = 0; i < players.length; i++) {
-                            players[i].cambiarVida(-cantidadVida);
+                        for (int i = 0; i < this.players.size(); i++) {
+                            this.players.get(indice).cambiarVida(-cantidadVida);
                         }
-                        players[indice].cambiarVida(+cantidadVida);
+                        this.players.get(indice).cambiarVida(+cantidadVida);
                         System.out.println("Se ha restado la vida de todos en " + cantidadVida);
                         break;
                     case 1:
-                        for (int i = 0; i < players.length; i++) {
-                            players[i].cambiarVida(cantidadVida);
+                        for (int i = 0; i < this.players.size(); i++) {
+                            this.players.get(indice).cambiarVida(cantidadVida);
                         }
-                        players[indice].cambiarVida(-cantidadVida);
+                        this.players.get(indice).cambiarVida(-cantidadVida);
                         System.out.println("Se ha aumentado la vida de todos en " + cantidadVida);
                         break;
                 }
@@ -295,7 +233,7 @@ public class InfinityGame {
         }
     }
 
-    public static void casillaPortal(Jugador players, int indice, char tablero[]) {
+    private void casillaPortal(Jugador players, int indice, char tablero[]) {
         System.out.println("Has caido en una casilla de portal!");
         for (int i = 0; i < tablero.length; i++) {
             if (tablero[i] == 'P') {
@@ -308,7 +246,7 @@ public class InfinityGame {
         }
     }
 
-    public static void casillaSalud(Jugador players) {
+    private static void casillaSalud(Jugador players) {
         System.out.println("Has caido en una casilla de salud!");
         int vida = (int) ((Math.random() * 4) + 1);
         int signo = (int) (Math.random() * 2);
@@ -321,14 +259,14 @@ public class InfinityGame {
         }
     }
 
-    public static void mostrarTabla(Jugador[] players) {
+    private void mostrarTabla() {
         System.out.println("NickName " + "\t" + "Puntos de salud " + "\t" + "Posición actual");
-        for (int i = 0; i < players.length; i++) {
-            System.out.println(players[i].getName() + "\t" + players[i].getSalud() + "\t" + players[i].getPosicion());
+        for (int i = 0; i < this.players.size(); i++) {
+            System.out.println(this.players.get(i).getName() + "\t" + this.players.get(i).getSalud() + "\t" + this.players.get(i).getPosicion());
         }
     }
 
-    public static void meditar(Jugador players, char tablero[]) {
+    private static void meditar(Jugador players, char tablero[]) {
         System.out.println("Has elegido meditar");
         int oportunidades = players.getMeditar();
         if (oportunidades == 0) {

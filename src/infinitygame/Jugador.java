@@ -8,12 +8,12 @@ package infinitygame;
  *
  * @author Mauricio
  */
-public class Jugador {
-    private String name;
-    private int health;
-    private int position;
-    private int numcasillas;
-    private int meditar;
+public abstract class Jugador {
+    protected  String name;
+    protected  int health;
+    protected  int position;
+    protected  int numcasillas;
+    protected  int meditar;
     
     public Jugador(String nombre, int numcasillas){
         this.name = nombre;
@@ -69,5 +69,7 @@ public class Jugador {
     public int getMeditar(){
         return this.meditar;
     }
+    
+    public abstract String getClase();
 }
     
